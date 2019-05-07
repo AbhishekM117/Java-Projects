@@ -1,0 +1,769 @@
+Project 5
+Board.java
+package Dots;
+import java.awt.Point;
+import java.util.ArrayList;
+
+public class Board implements Cloneable{
+	final static int RED=0;
+	final static int BLUE=1;
+	final static int BLACK=2;
+	final static int BLANK=3;
+	private int[][] hEdge;
+	private int[][] vEdge;
+	private int[][] box;
+	private int n, redScore, blueScore;
+	public Board(int n) {
+	hEdge= new int[n-1][n];
+	vEdge =new int[n][n-1];
+	box= new int[n-1][n-1];
+	fill(hEdge,BLANK);
+	fill(vEdge,BLANK);
+	fill(box,BLANK);
+	this.n = n;
+	redScore = blueScore = 0;
+
+}  public Board clone() {
+	Board cloned= new Board(n);
+	for(int i=0; i<(n-1); i++)
+	for(int j=0; j<n; j++)
+    cloned.hEdge[i][j] = hEdge[i][j];
+	for(int i=0; i<n; i++)
+	for(int j=0;j<(n-1);j++)
+	cloned.vEdge[i][j]= vEdge[i][j];
+	for(int i=0;i<(n-1);i++)
+		for(int j=0;j<(n-1);j++)
+			cloned.box[i][j]=box[i][j];
+	cloned.redScore=redScore;
+	cloned.blueScore=blueScore;
+	return cloned;
+}
+private void fill(int[][] array, int val) {
+	for(int i=0; i<array.length; i++)
+	for(int j=0; j<array[i] .length; j++)
+	array[i][j]=val;
+	
+}
+public int getSize() {return n;}
+public int getRedScore() {
+return redScore;}
+public int getBlueScore() {
+return blueScore;}
+public int getScore(int color) {
+if(color== RED) return redScore;
+else return blueScore;}
+public static int toggleColor(int color) {
+if(color==RED)
+	return BLUE;
+else 
+	return RED;
+
+
+
+}
+public ArrayList<Edge> getAvailableMoves() {
+	ArrayList<Edge> ret= new ArrayList<Edge>();
+	for(int i=0; i<(n-1);i++)
+		for(int j=0; j<n; j++)
+			if(hEdge[i][j] ==BLANK)
+				ret.add(new Edge(i,j,true));
+	for(int i=0; i<n; i++)
+		for(int j=0; j<(n-1); j++)
+		if(vEdge[i][j] ==BLANK)
+		ret.add(new Edge(i,j,false));
+		return ret;
+				
+    
+}
+public ArrayList<Point> setHEdge(int x, int y, int color) {
+	hEdge[x][y]=BLACK;
+	ArrayList<Point> ret= new ArrayList<Point>();
+	if(y<(n-1) && vEdge[x][y]==BLACK && vEdge[x+1][y]==BLACK && hEdge[x][y+1]==BLACK) {
+		box[x][y]=color;
+		ret.add(new Point(x,y));
+		if( color== RED) redScore++;
+		else blueScore++;
+	}
+	if(y>0 && vEdge[x][y-1]==BLACK && vEdge[x+1][y-1]==BLACK &&hEdge[x][y-1]==BLACK) {
+		box[x][ y-1]=color;
+		ret.add(new Point(x,y-1));
+		 if(color == RED) redScore++;
+		else blueScore++;
+	}
+	return ret;
+}
+
+public ArrayList<Point>setVEdge(int x,int y,int color){
+	vEdge[x][y]=BLACK;
+	ArrayList<Point>ret=new ArrayList<Point>();
+	if(x<(n-1)&&hEdge[x][y]==BLACK&&hEdge[x][y+1]==BLACK&&vEdge[x+1][y]==BLACK) {
+		box[x][y]=color;
+		ret.add(new Point(x,y));
+		if(color==RED)redScore++;
+		else blueScore++;
+	
+	}
+	if(x>0&&hEdge[x-1][y]==BLACK&&hEdge[x-1][y+1]==BLACK&&vEdge[x-1][y]==BLACK) {
+		box[x-1][y]=color;
+		ret.add(new Point(x-1,y));
+		if(color==RED)redScore++;
+		else blueScore++;
+		
+	}
+	return ret;
+}
+public boolean isComplete() {
+	return (redScore+blueScore)==(n-1)*(n-1);
+	
+}
+public int getWinner() {
+	if(redScore>blueScore)return RED;
+	else if(redScore<blueScore)return BLUE;
+	else return BLANK;
+	
+}
+public Board getNewBoard(Edge edge,int color) {
+	Board ret = clone();
+	if(edge.isHorizontal())
+		ret.setHEdge(edge.getX(),edge.getY(), color);
+	else
+		ret.setVEdge(edge.getX(),edge.getY(), color);
+	return ret;
+	
+}
+private int getEdgeCount(int i,int j) {
+	int count=0;
+	if(hEdge[i][j]==BLACK)count++;
+	if(hEdge[i][j+1]==BLACK)count++;
+	if(vEdge[i][j]==BLACK)count++;
+	if(vEdge[i+1][j]==BLACK)count++;
+	return count;
+	
+}
+public int getBoxCount(int nSides) {
+	int count = 0;
+	for(int i=0; i<(n-1); i++)
+		for(int j=0; j<(n-1); j++) {
+			if(getEdgeCount(i, j) == nSides)
+				count++;
+		}
+	return count;
+}
+}
+Edge.java
+package Dots;
+public class Edge {
+	private int x, y;
+	private boolean horizontal;
+	Edge() {
+		x= y = -1;
+		horizontal= false;
+		}
+		Edge(int x, int y, boolean horizontal) {
+		this.x =x;
+		this.y = y;
+		this.horizontal =horizontal;
+		}
+		public boolean isHorizontal() {
+		return horizontal;
+		}
+		public int getX() {
+		return x;
+		}
+		public int getY() {
+		return y;
+		}
+		public String toString() {
+		return ((horizontal ? " H " : " V " ) + x+""+ y);
+		}
+}
+
+Gameplay.java
+package Dots;
+import javax.swing.*;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+
+public class Gameplay {
+	private final static int size =8;
+	private final static int dist =40;
+	
+	private int n;
+	private Board board;
+	private int turn;
+	private boolean mouseEnabled;
+	
+	GameSolver redSolver, blueSolver, solver;
+	String redName, blueName;
+	Main parent;
+	
+	private JLabel[][] hEdge, vEdge, box;
+	private boolean[][] isSetHEdge, isSetVEdge;
+	
+	private JFrame frame;
+	private JLabel redScoreLabel, blueScoreLabel , statusLabel;
+	
+	private MouseListener mouseLiestener = new MouseListener() {
+		public void mouseClicked(MouseEvent mouseEvent) {
+			if(!mouseEnabled)return;
+			processMove(getSource(mouseEvent.getSource()));
+		}
+		public void mousePressed(MouseEvent mouseEvent) {
+			
+		}
+		public void mouseReleased(MouseEvent mouseEvent) {
+			
+		}
+		public void mouseEntered(MouseEvent mouseEvent) {
+			if(!mouseEnabled)return;
+			Edge location = getSource(mouseEvent.getSource());
+			int x=location.getX(), y=location.getY();
+			if(location.isHorizontal()) {
+				if(isSetHEdge[x][y]) return;
+				hEdge[x][y].setBackground((turn == Board.RED)? Color.RED : Color.BLUE);
+			}
+			else {
+				if(isSetVEdge[x][y]) return;
+				vEdge[x][y].setBackground((turn == Board.RED)?Color.RED : Color.BLUE); 
+			
+		}
+		
+	}
+		public void mouseExited(MouseEvent mouseEvent) {
+			if(!mouseEnabled) return;
+			Edge location= getSource(mouseEvent.getSource());
+			int x=location.getX(), y=location.getY();
+			if(location.isHorizontal()) {
+			if(isSetHEdge[x][y]) return;
+			hEdge[x][y].setBackground(Color.WHITE);
+		}
+			else {
+				if(isSetVEdge[x][y]) return;
+				vEdge[x][y].setBackground(Color.WHITE);
+			}
+
+}
+	};
+	private void processMove(Edge location) {
+		 int x=location.getX(), y=location.getY();
+		ArrayList<Point> ret;
+		if(location.isHorizontal()) {
+		if(isSetHEdge[x][y]) return;
+		ret= board.setHEdge(x,y,turn);
+		hEdge[x][y] .setBackground(Color.BLACK);
+		isSetHEdge[x][y] =true;
+		}
+		else {
+			if(isSetVEdge[x][y]) return;
+			ret= board.setVEdge(x,y,turn);
+			vEdge[x][y] .setBackground(Color.BLACK);
+			isSetVEdge[x] [y] = true;
+		}
+		for(Point p:ret)
+			box[p.x][p.y].setBackground((turn == Board.RED)? Color.RED: Color.BLUE);
+		redScoreLabel.setText(String.valueOf(board.getRedScore()));
+		blueScoreLabel.setText(String.valueOf(board.getBlueScore()));
+		if(board.isComplete()) {
+			int winner= board.getWinner();
+			if(winner == Board. RED) {
+			statusLabel.setText("Piayer-1 is the winner!");
+			statusLabel.setForeground(Color.RED);
+			}
+			else if(winner ==Board. BLUE) {
+				statusLabel.setText("Piayer-2 is the winner!");
+				statusLabel.setForeground(Color.BLUE);
+			}
+			else {
+				statusLabel.setText("Game Tied!");
+				statusLabel.setForeground(Color.BLACK);
+				}
+				}
+		if(ret.isEmpty()) {
+			if(turn == Board.RED){
+			turn= Board.BLUE;
+			solver= blueSolver;
+			statusLabel.setText("Piayer-2's Turn....");
+			statusLabel.setForeground(Color.BLUE);
+			}
+			else {
+				turn=Board.RED;
+				solver=redSolver;
+				statusLabel.setText("Piayer-1's Turn....");
+				statusLabel.setForeground(Color.RED);
+			}
+		}
+	}
+		private void manageGame(){
+ while(!board.isComplete()) {
+ if(goBack) return; 
+if(solver == null) { 
+mouseEnabled=true; } 
+else { 
+mouseEnabled=false;
+ processMove(solver.getNextMove(board, turn));
+}
+ try { Thread.sleep(100);}
+ catch (InterruptedException e){
+ e.printStackTrace();
+}}}
+ private Edge getSource(Object object){
+ for(int i=0; i<(n-1); i++)
+ for(int j=0; j<n;j++)
+ if(hEdge [i][j] == object) 
+return new Edge(i,j,true);
+ for(int i=0; i<n; i++)
+for(int j=0; j<(n-1); j++)
+if(vEdge[i][j]==object)
+return new Edge(i,j,false);
+return new Edge(); }
+private JLabel getHorizontalEdge(){
+JLabel label=new JLabel(); 
+label.setPreferredSize(new Dimension(dist, size)); 
+label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+ label.setOpaque(true);
+ label.addMouseListener(mouseLiestener);
+ return label; 
+}
+private JLabel getVerticalEdge() {
+ JLabel label=new JLabel();
+ label.setPreferredSize(new Dimension(size, dist));
+ label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+ label.setOpaque(true); 
+label.addMouseListener(mouseLiestener);
+ return label;}
+private JLabel getDot() {
+ JLabel label=new JLabel();
+ label.setPreferredSize(new Dimension(size, size));
+ label.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+ label.setOpaque(true); 
+ return label;}
+private JLabel getBox(){
+JLabel label=new JLabel(); 
+label.setPreferredSize(new Dimension(size,dist));
+label.setOpaque(true);
+ return label;
+}
+ private JLabel getEmptyLabel(Dimension d) {
+JLabel label = new JLabel();
+ label.setPreferredSize(d); 
+return label; } 
+public Gameplay(Main parent, JFrame frame, int n, GameSolver redSolver, GameSolver blueSolver,String redName, String blueName){
+ this.parent = parent;
+ this.frame = frame; 
+this.n=n;
+ this.redSolver = redSolver;
+ this.blueSolver=blueSolver;
+ this.redName = redName;
+ this.blueName=blueName; 
+initGame(); }
+private boolean goBack; 
+private ActionListener backListener=new ActionListener(){
+ public void actionPerformed(ActionEvent actionEvent){
+goBack=true; 
+ }
+ };
+ private void initGame(){
+ board=new Board(n);
+ int boardWidth= n*size + (n-1)*dist;
+ turn = Board.RED; solver=redSolver;
+ JPanel grid=new JPanel(new GridBagLayout());
+ GridBagConstraints constraints=new GridBagConstraints();
+ constraints.gridx = 0;
+ constraints.gridy=0; 
+grid.add(getEmptyLabel(new Dimension(2*boardWidth, 10)), constraints); 
+
+JPanel playerPanel = new JPanel(new GridLayout(2, 2));
+ if(n>3){
+	 playerPanel.setPreferredSize(new Dimension(2*boardWidth, dist));
+ }
+ else{
+	 playerPanel.setPreferredSize(new Dimension(2*boardWidth, 2*dist));
+ }
+ playerPanel.add(new JLabel("<html><font color='red'>Player-1:", SwingConstants.CENTER));
+ playerPanel.add(new JLabel("<html><font color='blue'>Player-2:", SwingConstants.CENTER));
+ playerPanel.add(new JLabel("<html><font color='red'>" + redName, SwingConstants.CENTER));
+ playerPanel.add(new JLabel("<html><font color='blue'>" + blueName, SwingConstants.CENTER));
+++constraints.gridy;
+ grid.add(playerPanel, constraints);
+ ++constraints.gridy;
+ grid.add(getEmptyLabel(new Dimension(2*boardWidth, 10)), constraints); 
+JPanel scorePanel=new JPanel(new GridLayout(2,2));
+scorePanel.setPreferredSize(new Dimension(2*boardWidth, dist));
+scorePanel.add(new JLabel("<html><font color='red'>Score:", SwingConstants.CENTER));
+scorePanel.add(new JLabel("<html><font color='blue'>Score:",SwingConstants.CENTER));
+redScoreLabel=new JLabel("0", SwingConstants.CENTER);
+redScoreLabel.setForeground(Color.RED);
+scorePanel.add(redScoreLabel);
+blueScoreLabel=new JLabel("0", SwingConstants.CENTER);
+blueScoreLabel.setForeground(Color.BLUE);
+scorePanel.add(blueScoreLabel);
+++constraints.gridy;
+grid.add(scorePanel, constraints);
+++constraints.gridy;
+grid.add(getEmptyLabel(new Dimension(2*boardWidth, 10)), constraints);
+hEdge = new JLabel[n-1][n];
+isSetHEdge=new boolean[n-1][n];
+vEdge=new JLabel[n][n-1];
+isSetVEdge =new boolean[n][n-1]; 
+box=new JLabel[n-1][n-1];
+for(int i=0; i<(2*n-1); i++){
+JPanel pane=new JPanel(new FlowLayout(FlowLayout.CENTER,0,0));
+if(i%2==0) {
+pane.add(getDot());
+ for(int j=0; j<(n-1);j++ ){
+ hEdge [j][i/2] = getHorizontalEdge(); 
+pane.add(hEdge[j][i/2]);
+ pane.add(getDot());
+}}
+else{
+ for(int j=0; j<(n-1);j++){
+ vEdge[j][i/2] = getVerticalEdge();
+ pane.add(vEdge[j][i/2]); 
+box[j][i/2] = getBox();
+ pane.add(box[j][i/2]); }
+vEdge[n-1][i/2]= getVerticalEdge();
+ pane.add(vEdge[n-1][1/2]); }
+++constraints.gridy;
+ grid.add(pane, constraints);
+ }++constraints.gridy; 
+grid.add(getEmptyLabel(new Dimension(2 * boardWidth, 10)), constraints);
+statusLabel =new JLabel("Player-l's Turn...", SwingConstants.CENTER);
+statusLabel.setForeground(Color.RED);
+statusLabel.setPreferredSize(new Dimension(2 * boardWidth, dist));
+++constraints.gridy;
+grid.add(statusLabel, constraints);
+++constraints.gridy;
+grid.add(getEmptyLabel(new Dimension(2*boardWidth, 10)), constraints);
+ JButton goBackButton=new JButton("Go Back to Main Menu"); 
+goBackButton.setPreferredSize(new Dimension (boardWidth, dist)); 
+goBackButton.addActionListener(backListener);
+++constraints.gridy;
+ grid.add(goBackButton, constraints);
+ frame.getContentPane().removeAll();
+ frame.validate();
+ frame.repaint();
+ frame.setContentPane(grid);
+ frame.pack();
+ frame.setLocationRelativeTo(null);
+ frame.setVisible(true);
+ goBack=false;
+ manageGame();
+ while(!goBack){
+ try { 
+Thread.sleep(100);
+ }catch (InterruptedException e){
+ e.printStackTrace(); 
+} 
+}
+parent.initGUI(); }
+
+}
+Gamesolver.java
+package Dots;
+public abstract class GameSolver{
+protected int referenceColor;
+private final static int cScore = 20;
+private final static int cThree = 15;
+private final static int cTwo=1;
+protected int heuristic(final Board board, int color)
+{ int value;
+if(referenceColor == Board.RED) 
+value = cScore * board.getRedScore() - cScore*board.getBlueScore(); 
+else
+value = cScore*board.getBlueScore() - cScore*board.getRedScore();
+if(referenceColor == color)
+value += cThree*board.getBoxCount(3)-cTwo *board.getBoxCount(2);
+else
+value-= cThree*board.getBoxCount(3)-cTwo *board.getBoxCount(2); return value;
+}
+public abstract Edge getNextMove(final Board board,int color);
+}
+
+Main.java
+package Dots;
+import javax.swing.*;
+
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+public class Main {
+private int n;
+private GameSolver redSolver,blueSolver;
+private String redName, blueName;
+private JFrame frame;
+private JLabel modeError, sizeError;
+String[] players= {"Select player", "Human", "Random Player"};
+private JRadioButton[] sizeButton;
+JComboBox redList;
+JComboBox blueList;
+ ButtonGroup sizeGroup;
+public Main() {
+frame=new JFrame();
+frame.setDefaultCloseOperation(JFrame. EXIT_ON_CLOSE);
+redList= new JComboBox(players);
+redList.setEditable(true);
+blueList =new JComboBox(players);
+redList.setEditable(true);
+sizeButton =new JRadioButton[8];
+sizeGroup = new ButtonGroup();
+for(int i=0; i<8; i++) {
+String size= String.valueOf(i+3);
+sizeButton[i] =new JRadioButton(size +" x "+size);
+sizeGroup.add(sizeButton [i]);
+}
+}
+private JLabel getEmptyLabel(Dimension d) {
+JLabel label =new JLabel();
+label.setPreferredSize( d);
+return label;
+}
+private boolean startGame;
+private GameSolver getSolver(int level) {
+if(level ==1) return new RandomSolver();
+else return null;
+}
+private ActionListener submitListener =new ActionListener () { 
+public  void  actionPerformed(ActionEvent actionEvent){
+ int rIndex = redList.getSelectedIndex();
+int bIndex = blueList.getSelectedIndex();
+if(rIndex==0 || bIndex==0) {
+modeError.setText("You MUST select the players before continuing.");
+return;
+}
+else{
+modeError.setText("");
+redName=players[rIndex];
+blueName=players[bIndex];
+if(rIndex>1)redSolver=getSolver(rIndex-1);
+if(bIndex>1)blueSolver=getSolver(bIndex-1);
+}
+for(int i=0; i<8; i++) {
+if(sizeButton[i].isSelected()){
+n= i+3;
+startGame =true;
+return;
+}
+}
+sizeError.setText("You MUST select the size of board before continuing.");
+}
+};
+public void initGUI(){
+redSolver=null;
+blueSolver=null;
+JPanel grid = new JPanel(new GridBagLayout());
+GridBagConstraints constraints= new GridBagConstraints();
+constraints.gridx = 0;
+constraints.gridy = 0;
+++constraints.gridy;
+grid.add(getEmptyLabel(new Dimension(500,25)),constraints);
+modeError =new JLabel("", SwingConstants.CENTER);
+modeError.setForeground(Color.RED);
+modeError.setPreferredSize(new Dimension(500, 25));
+++constraints.gridy;
+grid.add(modeError, constraints);
+JPanel modePanel=new JPanel(new GridLayout(2,2));
+modePanel.setPreferredSize(new Dimension(400,50));
+modePanel.add(new JLabel("<html><font color='red'>Player-1:", SwingConstants.CENTER));
+modePanel.add(new JLabel("<html><font color='blue'>Player-2:", SwingConstants.CENTER));
+modePanel.add(redList);
+modePanel.add(blueList);
+redList.setSelectedIndex(0);
+blueList.setSelectedIndex(0);
+++constraints.gridy;
+grid.add(modePanel,constraints);
+++constraints.gridy;
+grid.add(getEmptyLabel(new Dimension(500,25)),constraints);
+sizeError=new JLabel("",SwingConstants.CENTER);
+sizeError.setForeground(Color.RED);
+sizeError.setPreferredSize(new Dimension(500,25));
+++constraints.gridy;
+grid.add(sizeError, constraints);
+++constraints.gridy;
+JLabel messageLabel= new JLabel("Select the size of the board:");
+messageLabel.setPreferredSize(new Dimension(400, 50));
+grid.add(messageLabel, constraints);
+
+JPanel sizePanel =new JPanel(new GridLayout(4, 2));
+sizePanel.setPreferredSize(new Dimension(400,100));
+for(int i=0; i<8; i++)
+sizePanel.add(sizeButton[i]);
+sizeGroup.getSelection();
+++constraints.gridy;
+grid.add(sizePanel, constraints);
+++constraints.gridy;
+grid.add(getEmptyLabel(new Dimension(500, 25)), constraints);
+
+JButton submitButton =new JButton("Start Game");
+submitButton.addActionListener(submitListener);
+++constraints.gridy;
+grid.add(submitButton, constraints);
+++constraints.gridy;
+grid.add(getEmptyLabel(new Dimension(500, 25)), constraints);
+frame.setContentPane(grid);
+frame.pack();
+frame.setLocationRelativeTo(null);
+frame.setVisible(true); 
+startGame = false;
+while(!startGame) {
+try {
+Thread.sleep(100);
+} catch (InterruptedException e) {
+e.printStackTrace();
+}
+}
+new Gameplay(this, frame, n, redSolver,blueSolver, redName, blueName);
+}
+public static void main(String[] args) {
+    SwingUtilities.invokeLater(new Runnable(){
+        public void run() {
+            Main n=new Main();
+            n.initGUI();
+        }
+    });
+}
+}
+MCTreeNode.java
+package Dots;
+import java.util.ArrayList;
+import java.util.Random;
+ public class MCTreeNode {
+private final static Random r = new Random(System.nanoTime()); 
+private final static int maxLevel = 3; 
+private final static double epsilon = 1e-6;
+ static int nodeCount=0, simCount = 0;
+ private ArrayList<MCTreeNode> children;
+ private double nVisits, totValue;
+ private Board board;
+ private Edge edge1;
+ private int turn, level;
+ public void expand(){
+  if(level==maxLevel){ children = null;
+ return;
+ }
+ ArrayList<Edge> moves = board.getAvailableMoves();
+ if(moves.size()==0) { children = null;
+ return;
+}
+ children=new ArrayList<MCTreeNode>(); 
+for(Edge edge1:moves){
+ Board nextBoard = board.getNewBoard(edge1, turn);
+ children.add(new MCTreeNode(nextBoard, (board.getScore(turn)<nextBoard.getScore(turn))? turn:
+ Board.toggleColor(turn), edge1, (level+1)));
+nodeCount++;}}
+ public double getValue(double pVisits){ double mid = Math.sqrt(Math.log(pVisits+1)/(nVisits + epsilon));/// MCFreeNode.ROOT2;
+ return totValue / (nVisits + epsilon)+ mid+ r.nextDouble()* epsilon; }
+ public Edge getMove(){
+  double bestValue = Double.NEGATIVE_INFINITY;
+ Edge bestEdge = null;
+ for(MCTreeNode child:children){
+ double currentValue=child.getAverageValue();
+ if(currentValue>bestValue) {
+ bestValue=currentValue; 
+bestEdge = child.getEdge(); 
+}}
+return bestEdge;
+}
+public void updateStats(double value){
+ nVisits++; 
+totValue+= value; }
+public double getAverageValue(){
+ return totValue/nVisits;
+}
+public Edge getEdge() {
+ return edge1;}
+ public Board getBoard(){ return board; }
+ public int getTurn(){ return turn; }
+ public double getVisits() { return nVisits; }
+public ArrayList<MCTreeNode>getChildren() { return children;}
+ MCTreeNode(Board board, int turn, Edge edge, int level){
+ this.board = board; 
+this.turn= turn; 
+this.level = level; 
+this.edge1=edge; 
+}}
+Pair.java
+package Dots;
+
+public class Pair implements Comparable<Pair>{
+ private int utility;
+ private Edge edge;
+ Pair(Edge edge, int utility){
+ this.edge = edge;
+ this.utility=utility; }
+ int getUtility() {
+ return utility; 
+} 
+Edge getEdge(){ return this.edge;}
+void setEdge(Edge edge) { this.edge=edge;}
+void setUtility(int utility) { this.utility=utility;
+}  
+public int compareTo(Pair pair) {return this.utility-pair.utility;
+}
+}
+Randomsolver.java
+package Dots;
+import java.util.ArrayList;
+import java.util.Random; 
+public class RandomSolver extends GameSolver{
+ @Override 
+public Edge getNextMove(final Board board, int color){
+ ArrayList<Edge> moves=board.getAvailableMoves(); 
+ArrayList<Edge> bMoves = new ArrayList<Edge>(); 
+for(Edge move : moves){
+ Board newBoard= board.getNewBoard(move, color);
+ if(newBoard.getScore(color) > board.getScore(color))
+ bMoves.add(move);
+ } 
+if(!bMoves.isEmpty()) moves =bMoves; 
+return moves.get(new Random().nextInt(moves.size())); }
+}
+Testprogram.java
+package Dots;
+import java.util.ArrayList;
+import java.util.Random; 
+public class RandomSolver extends GameSolver{
+ @Override 
+public Edge getNextMove(final Board board, int color){
+ ArrayList<Edge> moves=board.getAvailableMoves(); 
+ArrayList<Edge> bMoves = new ArrayList<Edge>(); 
+for(Edge move : moves){
+ Board newBoard= board.getNewBoard(move, color);
+ if(newBoard.getScore(color) > board.getScore(color))
+ bMoves.add(move);
+ } 
+if(!bMoves.isEmpty()) moves =bMoves; 
+return moves.get(new Random().nextInt(moves.size())); }
+}
+Treenode.java
+package Dots;
+public class TreeNode{
+private Board board; 
+private TreeNode parent; 
+private int color, utility;
+private Edge edge; 
+final static int MIN =-1000000000; 
+public TreeNode(Board board, int color, TreeNode parent, Edge edge) 
+{ 
+this.board = board; 
+this.color = color; 
+this.parent=parent; 
+this.utility=MIN;
+this.edge=edge;
+}
+public Board getBoard(){
+ return board;
+}
+ public TreeNode getParent(){
+ return parent;}
+ public int getColor(){ return color;}
+ public int getUtility(){ return utility; }
+public void setutility(int utility) {
+ this.utility=utility;}
+public Edge getEdge() { return this.edge; }
+public void setEdge(Edge edge){ this.edge=edge; }}
+
