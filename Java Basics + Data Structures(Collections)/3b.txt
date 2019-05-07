@@ -1,0 +1,125 @@
+
+3b)
+public interface Emp {
+
+	void insert(int id,String UID,String name,double sal);
+	void display();
+	boolean find(int id);
+	boolean delete(int id);
+}
+
+
+
+public class Operations implements Emp {
+	int id; String UID; String name; double sal;
+	@Override
+	public void insert(int id, String UID, String name, double sal) {
+		this.id=id;
+		this.UID=UID;
+		this.name=name;
+		this.sal=sal;
+		
+	}
+	@Override
+	public void display() {
+		
+		System.out.println("ID="+id+"\t UID="+UID+"\t Name="+name+"\t Sal="+sal);
+	}
+	@Override
+	public boolean find(int id) {
+if(this.id==id)
+	return true;
+else
+	return false;
+		}
+	@Override
+	public boolean delete(int id) {
+		if(this.id==id)
+		{
+			this.id=0;
+			this.UID=null;
+			this.name=null;
+			this.sal=0.0;
+		return true;
+		}else
+		{
+			return false;
+		}	}       }
+
+
+
+
+
+import java.util.Scanner;
+
+
+public class Ex {
+
+	public static void main(String[] args) {
+		
+		Operations ob[]=new Operations[100];
+		Scanner sc=new Scanner(System.in);
+		System.out.println("entre how many employees");
+		int n=sc.nextInt();
+		for(int i=0;i<n;i++)
+		{
+			ob[i]=new Operations();
+			System.out.println("entre ID of="+i);
+			int t1=sc.nextInt();
+			System.out.println("entre UID of="+i);
+			String t2=sc.next();
+			System.out.println("entre name of="+i);
+			String t3=sc.next();
+			System.out.println("entre salary of="+i);
+			double t4=sc.nextDouble();
+			ob[i].insert(t1, t2, t3, t4);
+		}
+		
+		for(int i=0;i<n;i++)
+		{
+			ob[i].display();
+		}
+		System.out.println("entre id to find");
+				int t1=sc.nextInt();
+				boolean r=false;
+		for(int i=0;i<n;i++)
+		{
+			 r=ob[i].find(t1);
+			if(r==true)	break;		
+		}
+		if(r==true)
+		{
+			System.out.println("found");
+		}
+		else
+		{
+			System.out.println(" not found");
+		}	
+		System.out.println("entre id to delete");
+		int t=sc.nextInt();
+		boolean r1=false;
+		for(int i=0;i<n;i++)
+		{
+			r1= ob[i].delete(t);if(r1==true)	break;	
+						
+		}
+		if(r1==true)
+		{
+			System.out.println("Seccufully deleted");
+		}
+		else
+		{
+			System.out.println(" not found for delete");
+		}	
+	}
+
+}
+
+
+
+
+
+
+
+
+

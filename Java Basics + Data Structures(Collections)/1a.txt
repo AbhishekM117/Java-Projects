@@ -1,0 +1,40 @@
+import java.util.Scanner;
+
+public class Emp {
+private long eid;
+private double salary;
+private static String cname="Infosys";
+private String ename;
+void setdata() {
+	Scanner sc=new Scanner(System.in);
+	System.out.println("Enter EID");
+eid=sc.nextLong();
+System.out.println("Enter Salary");
+salary=sc.nextDouble();
+System.out.println("Enter Ename");
+ename=sc.next();
+sc.close();
+}
+void display() {
+	System.out.println(eid+"\t"+salary+"\t"+cname+"\t"+ename);
+	
+}
+void inc() {
+	if(salary>=25000 && salary<=35000)
+		salary=salary*1.20;
+	if(salary>=35000 && salary<=50000)
+		salary=salary*1.15;
+	if(salary>=51000)
+		salary=salary*1.10;
+	System.out.println("New Salary: "+salary);
+}
+}
+
+public class ex {
+public static void main(String args[]) {
+	Emp ob=new Emp();
+	ob.setdata();
+	ob.display();
+	ob.inc();
+}
+}

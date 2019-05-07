@@ -1,0 +1,51 @@
+public class StaticExample {
+
+    private static int count; 
+    public static String str;
+     static{
+        
+        System.out.println("StaticExample static block");
+         str="Test";
+        setCount(2);
+    }
+            static{
+        System.out.println("StaticExample static block2");
+    }
+           
+    public int getCount() {
+        return count;
+    }
+    public static void setCount(int count) {
+        if(count > 0)
+        StaticExample.count = count;
+    }
+             
+    public static class MyStaticClass{
+        public int count;
+        
+    }
+}
+public class TestStatic {
+
+    public static void main(String[] args) {
+        StaticExample.setCount(5);
+                
+        StaticExample.str = "abc";
+        StaticExample se = new StaticExample();
+        System.out.println(se.getCount());
+        
+        System.out.println(StaticExample.str +" is same as "+se.str);
+        System.out.println(StaticExample.str == se.str);
+        
+       
+        StaticExample.MyStaticClass myStaticClass = new StaticExample.MyStaticClass();
+        myStaticClass.count=10;
+        
+        StaticExample.MyStaticClass myStaticClass1 = new StaticExample.MyStaticClass();
+        myStaticClass1.count=20;
+        
+        System.out.println(myStaticClass.count);
+        System.out.println(myStaticClass1.count);
+    }
+    
+}

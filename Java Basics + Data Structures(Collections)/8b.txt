@@ -1,0 +1,57 @@
+a)class TestMultiNaming1 extends Thread{  
+  public void run(){  
+   System.out.println("running...");  
+  }  
+ public static void main(String args[]){  
+  TestMultiNaming1 t1=new TestMultiNaming1();  
+  TestMultiNaming1 t2=new TestMultiNaming1();  
+  System.out.println("Name of t1:"+t1.getName());  
+  System.out.println("Name of t2:"+t2.getName());  
+   
+  t1.start();  
+  t2.start();  
+  
+  t1.setName("example");  
+  System.out.println("After changing name of t1:"+t1.getName());  
+ }  
+}  
+
+b)class TestMultiPriority1 extends Thread{  
+ public void run(){  
+   System.out.println("running thread name is:"+Thread.currentThread().getName());  
+   System.out.println("running thread priority is:"+Thread.currentThread().getPriority());  
+  
+  }  
+ public static void main(String args[]){  
+  TestMultiPriority1 m1=new TestMultiPriority1();  
+  TestMultiPriority1 m2=new TestMultiPriority1();  
+  m1.setPriority(Thread.MIN_PRIORITY);  
+  m2.setPriority(Thread.MAX_PRIORITY);  
+  m1.start();  
+  m2.start();  
+   
+ }  
+}   
+
+c)class TestJoinMethod1 extends Thread{  
+ public void run(){  
+  for(int i=1;i<=5;i++){  
+   try{  
+    Thread.sleep(500);  
+   }catch(Exception e){System.out.println(e);}  
+  System.out.println(i);  
+  }  
+ }  
+public static void main(String args[]){  
+ TestJoinMethod1 t1=new TestJoinMethod1();  
+ TestJoinMethod1 t2=new TestJoinMethod1();  
+ TestJoinMethod1 t3=new TestJoinMethod1();  
+ t1.start();  
+ try{  
+  t1.join();  
+ }catch(Exception e){System.out.println(e);}  
+  
+ t2.start();  
+ t3.start();  
+ }  
+}  

@@ -1,0 +1,38 @@
+1)nested static class
+public class Circle {
+static double r=4.5;
+static class Calcution{
+	void compute() {
+		double t=3.14*r*r;
+		System.out.println("Area is= "+t);
+	}
+}
+}
+public class Sol {
+
+	public static void main(String[] args) {
+Circle.Calcution ob=new Circle.Calcution();
+ob.compute();
+	}
+
+}
+
+2)inner class
+public class Triangle {
+static double h=4.5,b=10.5;
+static class Area{
+	void compute() {
+		double t=0.5*h*b;
+		System.out.println("Area is= "+t);
+	}
+}
+}
+public class Sol {
+
+	public static void main(String[] args) {
+Triangle i=new Triangle();
+Triangle.Area ob=i.new Area();
+ob.compute();
+	}
+
+}

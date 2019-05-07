@@ -1,0 +1,45 @@
+import java.util.*;    
+class Book {    
+int id;    
+String name,author,publisher;    
+int quantity;    
+public Book(int id, String name, String author, String publisher, int quantity) {    
+    this.id = id;    
+    this.name = name;    
+    this.author = author;    
+    this.publisher = publisher;    
+    this.quantity = quantity;    
+}    
+}    
+public class HashtableExample {    
+public static void main(String[] args) {    
+    //Creating map of Books    
+    Map<Integer,Book> map=new Hashtable<Integer,Book>();    
+    //Creating Books    
+    Book b1=new Book(101,"Let us C","Yashwant Kanetkar","BPB",8);    
+    Book b2=new Book(102,"Data Communications & Networking","Forouzan","Mc Graw Hill",4);    
+    Book b3=new Book(103,"Operating System","Galvin","Wiley",6);    
+    //Adding Books to map   
+    map.put(1,b1);  
+    map.put(2,b2);  
+    map.put(3,b3);      
+    //Traversing map  
+    for(Map.Entry<Integer, Book> entry:map.entrySet()){    
+        int key=entry.getKey();  
+        Book b=entry.getValue();  
+        System.out.println(key+" Details:");  
+        System.out.println(b.id+" "+b.name+" "+b.author+" "+b.publisher+" "+b.quantity);   
+    }    
+}    
+}    
+
+
+void clear()	It is used to reset the hash table.
+boolean contains(Object value)	This method return true if some value equal to the value exist within the hash table, else return false.
+boolean containsValue(Object value)	This method return true if some value equal to the value exists within the hash table, else return false.
+boolean containsKey(Object key)	This method return true if some key equal to the key exists within the hash table, else return false.
+boolean isEmpty()	This method return true if the hash table is empty; returns false if it contains at least one key.
+void rehash()	It is used to increase the size of the hash table and rehashes all of its keys.
+Object get(Object key)	This method return the object that contains the value associated with the key.
+Object remove(Object key)	It is used to remove the key and its value. This method return the value associated with the key.
+int size()	This method return the number of entries in the hash table.

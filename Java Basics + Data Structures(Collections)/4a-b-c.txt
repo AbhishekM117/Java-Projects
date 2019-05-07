@@ -1,0 +1,166 @@
+4a) Write a java program to implement singleton design patteren.
+public class Singleton {
+
+    private static Singleton instance;
+    
+    private Singleton(){}
+    
+    public static Singleton getInstance(){
+        if(instance == null){
+            instance = new Singleton();
+        }
+        return instance;
+    }
+    void display()
+    {
+    	System.out.println("Singleton class");
+    }
+}
+
+public class A {
+
+	public static void main(String[] args) {
+		Singleton ob = Singleton.getInstance();
+		Singleton ob1 = Singleton.getInstance();
+ob.display();
+ob1.display();
+	}
+
+}
+
+
+
+4b) Write a java program to implement factory design patteren
+
+public interface Shape {
+   void draw();
+}
+
+public class Rectangle implements Shape {
+
+   @Override
+   public void draw() {
+      System.out.println("Inside Rectangle::draw() method.");
+   }
+}
+
+public class Square implements Shape {
+
+   @Override
+   public void draw() {
+      System.out.println("Inside Square::draw() method.");
+   }
+}
+
+public class Circle implements Shape {
+
+   @Override
+   public void draw() {
+      System.out.println("Inside Circle::draw() method.");
+   }
+}
+
+public class ShapeFactory {
+	
+   public Shape getShape(String shapeType){
+      if(shapeType == null){
+         return null;
+      }		
+      if(shapeType.equalsIgnoreCase("CIRCLE")){
+         return new Circle();
+         
+      } else if(shapeType.equalsIgnoreCase("RECTANGLE")){
+         return new Rectangle();
+         
+      } else if(shapeType.equalsIgnoreCase("SQUARE")){
+         return new Square();
+      }
+      
+      return null;
+   }
+}
+
+public class FactoryPatternDemo {
+
+   public static void main(String[] args) {
+      ShapeFactory shapeFactory = new ShapeFactory();
+
+      Shape shape1 = shapeFactory.getShape("CIRCLE");
+
+      shape1.draw();
+
+      Shape shape2 = shapeFactory.getShape("RECTANGLE");
+
+      shape2.draw();
+
+      Shape shape3 = shapeFactory.getShape("SQUARE");
+
+      shape3.draw();
+   }
+}
+Verify the output.
+
+Inside Circle::draw() method.
+Inside Rectangle::draw() method.
+Inside Square::draw() method.
+
+
+
+4c) Write a program to convert primitive into objact type
+class WrappingUnwrapping
+{
+    public static void main(String args[])
+    {
+        //  byte data type
+        byte a = 1;
+ 
+        // wrapping around Byte object
+        Byte byteobj = new Byte(a);
+ 
+        // int data type
+        int b = 10;
+ 
+        //wrapping around Integer object
+        Integer intobj = new Integer(b);
+ 
+        // float data type
+        float c = 18.6f;
+ 
+        // wrapping around Float object
+        Float floatobj = new Float(c);
+ 
+        // double data type
+        double d = 250.5;
+ // Wrapping around Double object
+        Double doubleobj = new Double(d);
+ 
+        // char data type
+        char e='a';
+// wrapping around Character object
+        Character charobj=e;
+
+        //  printing the values from objects
+        System.out.println("Values of Wrapper objects (printing as objects)");
+        System.out.println("Byte object byteobj:  " + byteobj);
+        System.out.println("Integer object intobj:  " + intobj);
+        System.out.println("Float object floatobj:  " + floatobj);
+        System.out.println("Double object doubleobj:  " + doubleobj);
+        System.out.println("Character object charobj:  " + charobj);
+ 
+        // objects to data types (retrieving data types from objects)
+        // unwrapping objects to primitive data types
+        byte bv = byteobj;
+        int iv = intobj;
+        float fv = floatobj;
+        double dv = doubleobj;
+        char cv = charobj;
+ 
+        // printing the values from data types
+        System.out.println("Unwrapped values (printing as data types)");
+        System.out.println("byte value, bv: " + bv);
+        System.out.println("int value, iv: " + iv);
+        System.out.println("float value, fv: " + fv);
+        System.out.println("double value, dv: " + dv);
+        System.out.println("char value, cv: " + cv);
+    }
+}

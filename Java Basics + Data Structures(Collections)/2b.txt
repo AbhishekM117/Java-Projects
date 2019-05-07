@@ -1,0 +1,45 @@
+1)Overloading
+public class Overload {
+static int add(int a,int b) {return (a+b);}
+static double add(double p,double q) {return (p+q);}
+static long add(long x) {return (x+x);}
+static String add(String s1,String s2) {return (s1+s2);}
+
+}
+public class Ex {
+
+	public static void main(String[] args) {
+System.out.println(Overload.add(4,5));
+System.out.println(Overload.add(4.6,4.8));
+System.out.println(Overload.add(597));
+System.out.println(Overload.add("Abhi","shek"));
+
+	}
+
+}
+
+2)Overriding
+public class Circle {
+void Area() {
+	double r=3.95,t;
+	t=3.14*r*r;
+	System.out.println("Area of cirlce is: "+t);
+}
+}
+public class Cylinder extends Circle{
+	void Area() {
+		double r=3.95,l=4.6,t;
+		t=0.5*l*r;
+		System.out.println("Area of cylinder is: "+t);
+	}
+}
+public class Ex {
+
+	public static void main(String[] args) {
+Circle c1=new Circle();
+c1.Area();
+Cylinder c2=new Cylinder();
+c2.Area();
+	}
+
+}

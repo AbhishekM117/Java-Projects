@@ -1,0 +1,81 @@
+
+public class Circle {
+private String color;
+private double radius;
+public String getColor() {
+	return color;
+}
+public void setColor(String color) {
+	this.color = color;
+}
+public double getRadius() {
+	return radius;
+}
+public void setRadius(double radius) {
+	this.radius = radius;
+}
+public Circle() {
+	this.radius=1.0;
+	this.color = "red";
+}
+public Circle(double r) {
+	this.radius=r;
+	this.color = "blue";
+}
+public Circle(double r,String s) {
+	this.radius=r;
+	this.color =s;
+}
+public String tostring() {
+	return "Circle[radius="+radius+"color="+color+"]";
+}
+public double getarea() {
+	return radius*radius*3.14;
+}
+}
+
+public class Cylinder extends Circle{
+private double height;
+
+public double getHeight() {
+	return height;
+}
+
+public void setHeight(double height) {
+	this.height = height;
+}
+public Cylinder(double h) {
+	super();
+	this.height=h;
+}
+public Cylinder() {
+	super();
+	this.height=1.0;
+}
+public Cylinder(double h,double radius) {
+	super(radius);
+	this.height=h;
+}
+public Cylinder(double h,double radius,String color) {
+	super(radius,color);
+	this.height=h;
+}
+public double getVolume() {
+	return getarea()*height;
+}
+public String toString() {
+	return "Cylinder [height=" + height + "]";
+}
+
+}
+
+public class Main {
+
+	public static void main(String[] args) {
+	Cylinder cy1= new Cylinder();
+	System.out.println(cy1.getRadius()+"\t"+cy1.getHeight()+"\t"+cy1.getColor()+"\t"+cy1.getarea()+"\t"+cy1.getVolume());
+	Cylinder cy2= new Cylinder(5.0,2.0);
+	System.out.println(cy2.getRadius()+"\t"+cy2.getHeight()+"\t"+cy2.getColor()+"\t"+cy2.getarea()+"\t"+cy2.getVolume());
+	}
+
+}

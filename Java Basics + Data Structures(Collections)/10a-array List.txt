@@ -1,0 +1,60 @@
+Craete a Array list and excute the following methods:
+1. boolean add(Object o):
+2. void add(int index, Object element):
+3. boolean addAll(Collection c):
+4. boolean addAll(int index, Collection c):
+6. Object clone():
+7. boolean contains(Object element):
+8. void ensureCapacity(int minCapacity):
+9. Object get(int index):
+10. int indexOf(Object o):
+11. Object remove(int index):
+12. Object set(int index, Object element):
+13. Boolean isEmpty()
+14. Boolean remove(Object o):
+5. void clear():
+
+import java.util.*;
+public class Arraylist {  
+ public static void main(String args[]){  
+  ArrayList<Book> list=new ArrayList<Book>();
+  Book b1= new Book(101,"Let us C","Yashwant","BPB",8);
+  Book b2= new Book(102,"Data communication and networking","Foruzan","Mc Graw Hill",4);
+  Book b3= new Book(103,"Operating System","Galvin","Wiley",6);
+  list.add(b1);
+  list.add(b2);  
+  list.add(b3);
+  list.add(0,b3);
+  list.remove(b3);
+  list.remove(1);
+  list.set(0,b2);
+  for(Book b:list) {
+	   System.out.println(b.id+" "+b.name+" "+b.author+" "+b.publisher+" "+b.quantity);  
+	    }
+  System.out.println(list.indexOf(b3));
+  System.out.println(list.get(1));
+  System.out.println(list.size());
+  System.out.println(list.contains(b2));
+  
+
+    for(Book b:list) {
+   System.out.println(b.id+" "+b.name+" "+b.author+" "+b.publisher+" "+b.quantity);  
+    }
+ }    
+}
+
+public class Book {
+	int id,quantity;
+	String name,author,publisher;
+public Book(int id,String name,String author,String publisher,int quantity) {
+	this.id=id;
+	this.name=name;
+	this.author=author;
+	this.publisher=publisher;
+	this.quantity=quantity;
+	
+	
+}
+	 }    
+	
+

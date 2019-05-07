@@ -1,0 +1,105 @@
+5a) Write a java program to generate all rotations of a given string    
+ 
+class Test
+{
+    // Print all the rotated string.
+    static void printRotatedString(String str)
+    {
+        int len = str.length();
+      
+        // Generate all rotations one by one and print
+        StringBuffer sb; 
+         
+        for (int i = 0; i < len; i++)
+        {
+            sb = new StringBuffer();
+             
+            int j = i;  // Current index in str
+            int k = 0;  // Current index in temp
+      
+            // Copying the second part from the point
+            // of rotation.
+            for (int k2 = j; k2 < str.length(); k2++) {
+                sb.insert(k, str.charAt(j));
+                k++;
+                j++;
+            }
+      
+            // Copying the first part from the point
+            // of rotation.
+            j = 0;
+            while (j < i)
+            {
+                sb.insert(k, str.charAt(j));
+                j++;
+                k++;
+            }
+      
+            System.out.println(sb);
+        }
+    }
+     
+    // Driver method
+    public static void main(String[] args) 
+    {
+        String  str = new String("geeks");
+        printRotatedString(str);
+    }
+}
+
+
+
+
+5b) Write a Java Programming Code to Find Frequency of Characters in String
+
+import java.util.Scanner;
+
+public class JavaProgram
+{
+   public static void main(String args[])
+   {
+        int ci, i, j, k, l=0;
+        String str, str1;
+        char c, ch;
+        Scanner scan = new Scanner(System.in);
+        
+        System.out.print("Enter a String : ");
+        str=scan.nextLine();
+        
+        i=str.length();
+        for(c='A'; c<='z'; c++)
+        {
+            k=0;
+            for(j=0; j<i; j++)
+            {
+                ch = str.charAt(j);
+                if(ch == c)
+                {
+                    k++;
+                }
+            }
+            if(k>0)
+            {
+                System.out.println("The character " + c + " has occurred for " + k + " times");
+            }
+        }
+   }
+}
+5c)Write a java progra to Find all Substrings of a given string 
+
+import java.util.Scanner;
+class AllSubstrings{
+	public static void main(String args[]){
+		String str1, str2;
+		int length;
+		Scanner in = new Scanner(System.in);
+		System.out.println("Enter a string to find its sub-strings");
+		str1  = in.nextLine();
+		length = str1.length();   
+		System.out.println("Sub-strings of the string \""+str1+"\" are");
+		for(int c = 0 ; c < length ; c++ ){
+			for(int i = 1 ; i <= length - c ; i++ ){
+				str2 = str1.substring(c, c+i);
+				System.out.println(str2);
+			}		}	}                      }
+

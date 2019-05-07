@@ -1,0 +1,36 @@
+
+public abstract class Bank {
+abstract int getroi();
+abstract void loan();
+}
+import java.util.Scanner;
+
+public class SBI extends Bank {
+int getroi() {
+	return(7);
+}
+void loan() {
+	Scanner sc=new Scanner(System.in);
+	System.out.println("Enter Employee salary");
+	double sal=sc.nextDouble();
+	double max=sal*18;
+	SBI ob=new SBI();
+	double it=(double)(ob.getroi())/100;
+	double x=it*max;
+	double total=x+max;
+	System.out.println("Max loan amount= "+max);
+	System.out.println("Intrest= "+it);
+	System.out.println("Total= "+total);
+	sc.close();
+}
+}
+
+public class Print {
+
+	public static void main(String[] args) {
+SBI ob=new SBI();
+ob.loan();
+
+	}
+
+}
