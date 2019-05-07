@@ -1,0 +1,99 @@
+@charset "ISO-8859-1";
+
+body{
+font-family:helvetica,ariel;
+ background-image: url("C:/Users/aweso/Pictures/Saved Pictures/1531992171phpc5xBGc_g.jpg");
+ background-color: #cccccc;
+
+  background-position: center;
+ background-repeat: no-repeat;
+  background-size: 1920px 1080px;
+}
+
+
+.main h1,h2{
+	background-color:#ffffff;
+	text-align: center;
+	margin-left:auto;
+	margin-right:auto;
+	width:400px;
+	border-radius:20px;
+	opacity:0.7;
+}
+.sub .fail{
+	color:red;
+}
+.main .login table,td,th{
+	align:center;
+	text-align:center;
+	margin-left:auto;
+	margin-right:auto;
+	
+	
+	
+}
+.login{
+	background-color:#000000;
+	margin-left:auto;
+	margin-right:auto;
+	width:400px;
+	padding:5px;
+	border-radius:10px;
+	opacity:0.7;
+	
+}
+.login h3{
+	color:white;
+	text-align:center;
+	
+}
+.login td{
+	color:white;
+}
+.sub h1,h2{
+	background-color:#bcd7ff;
+	text-align: center;
+	margin-left:auto;
+	margin-right:auto;
+	width:200px;
+	border-radius:20px;
+	
+}
+.faculty h1{
+	align:center;
+	text-align:center;
+	margin-left:auto;
+	margin-right:auto;
+	width:400px;
+	border-radius:20px;
+	background-color:#bcd7ff;
+}
+
+.faculty h2{
+	align:center;
+	margin-left:auto;
+	margin-right:auto;
+	width:300px;
+	border-radius:20px;
+	background-color:#936897;
+	
+}
+.faculty table{
+	align:center;
+	margin-left:auto;
+	margin-right:auto;
+	width:70%;
+	border:2px solid black;
+	}
+.faculty th{
+	align:center;
+	margin-left:auto;
+	margin-right:auto;
+	border:2px solid black;
+	}
+.faculty td{
+	align:center;
+	margin-left:auto;
+	margin-right:auto;
+	border:2px solid black;
+	}

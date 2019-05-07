@@ -1,0 +1,119 @@
+package matrix;
+
+import java.util.*;
+public class Main {
+	public static void printmat(int mat[][]) 
+	{int i,j;
+	 for (i=0; i<mat.length; i++) {
+	    for (j=0; j<mat[i].length; j++) {System.out.print(mat[i][j]+" ");
+	    }
+	    System.out.println(" ");
+			}System.out.println("\n\n");}
+	 public static void logicmat(int mat[][]) 
+	    {int i,j;
+	 for (i=0; i<mat.length; i++) {
+		    for (j=1; j<(mat[i].length)-1; j++) {
+		if(mat[i][j-1]==0 && mat[i][j]==1 && mat[i][j+1]==0) {
+			mat[i][j-1]=1;
+			mat[i][j+1]=1;
+			}}}}
+	 
+	 public static int check(int mat[][]) {
+		 int i,j,sum=0,res=0;
+		 for (i=0; i<mat.length; i++) {
+			    for (j=0; j<(mat.length); j++) {
+			    	if(mat[i][j]==1) {
+			    		sum++;
+			    		}
+			    	if(sum==24) {
+			    		res=1;
+			    		 System.out.println("Successfull");
+			    	break;	
+			    	}
+			    	}
+			    }
+		 return res;
+	 }
+public static void main(String[] args) {
+int choice,i=0,j=0;
+Scanner sc=new Scanner(System.in);
+int matrix[][]= new int[5][5];
+int t[][]= new int[5][5];
+int max = 4; 
+int min = 1; 
+int range = max - min + 1; 
+int x = (int)(Math.random() * range) + min; 
+int y = (int)(Math.random() * range) + min; 
+for (i=0; i<matrix.length; i++) {
+    for (j=0; j<matrix[i].length; j++) {
+        matrix[i][j] = (int) (Math.random()*2);
+    }           
+}
+matrix[x][y]=9;
+System.out.println("Blank space is at: "+(x+1)+" "+(y+1));
+for (i=0; i<matrix.length; i++) {
+    for (j=0; j<matrix[i].length; j++) {System.out.print(matrix[i][j]+" ");
+    }
+    System.out.println(" ");
+		
+	}
+System.out.println("\n\n");
+
+logicmat(matrix);
+
+for (i=0; i<matrix.length; i++) {
+    for (j=0; j<matrix[i].length; j++) {System.out.print(matrix[i][j]+" ");
+    }
+    System.out.println(" ");
+		}System.out.println("\n\n");
+for (i=0; i<matrix.length; i++) {
+    for (j=0; j<(matrix.length); j++) {
+        System.out.println("Enter a choice");
+    	choice=sc.nextInt();
+    	System.out.println("Blank space moves towards: "+choice);
+    	if(choice==1) {
+    		t[0][0]=matrix[x][y];
+    		matrix[x][y]=matrix[x][y-1];
+    		matrix[x][y-1]=t[0][0];
+    		logicmat(matrix);   	
+    		y=y-1;
+    		printmat(matrix);
+    	}
+    	if(choice==2) {
+    		t[0][0]=matrix[x][y];
+    		matrix[x][y]=matrix[x][y+1];
+    		matrix[x][y+1]=t[0][0];
+    		logicmat(matrix);
+    		y=y+1;
+    		printmat(matrix);
+    	}
+    	if(choice==3) {
+    		t[0][0]=matrix[x][y];
+    		matrix[x][y]=matrix[x-1][y];
+    		matrix[x-1][y]=t[0][0];
+    		logicmat(matrix);
+    		x=x-1;
+    		printmat(matrix);
+    	}
+    	if(choice==4) {
+    		t[0][0]=matrix[x][y];
+    		matrix[x][y]=matrix[x+1][y];
+    		matrix[x+1][y]=t[0][0];
+    		logicmat(matrix);
+    		x=x+1;
+    		printmat(matrix);
+    	}
+    	check(matrix);
+    	if(check(matrix)==1) {break;}
+    	
+    	
+
+    }}
+System.out.println("\n\n");
+sc.close();
+printmat(matrix);
+
+
+}
+}
+
