@@ -1,0 +1,502 @@
+Project 4
+Account.java
+package Bank;
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+import java.awt.Toolkit;
+import java.awt.event.*;
+import java.awt.*;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.awt.event.ActionEvent;
+public class Account extends JFrame{
+private JPanel contentPane;
+static String srt;
+public static void main(String[] args){
+EventQueue.invokeLater(new Runnable(){
+public void run(){
+try{
+Account frame=new Account();
+frame.setVisible(true);
+}catch(Exception e){
+e.printStackTrace();
+}
+}
+});
+}
+/**
+*Create the frame.*/public void close(){
+WindowEvent winE=new WindowEvent(this,WindowEvent.WINDOW_CLOSING);
+Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(winE);
+}
+public Account(){
+setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+setBounds(100,100,450,300);
+contentPane=new JPanel();
+contentPane.setBorder(new EmptyBorder(5,5,5,5));
+setContentPane(contentPane);
+contentPane.setLayout(null);
+Login lg2=new Login();
+JLabel lblWelcome=new JLabel("welcome to account:"+lg2.srt);
+lblWelcome.setHorizontalAlignment(SwingConstants.CENTER);
+lblWelcome.setBounds(49,11,377,14);
+contentPane.add(lblWelcome);
+JButton btnBalane=new JButton("balance");
+btnBalane.addActionListener(new ActionListener(){
+public void actionPerformed(ActionEvent arg0){
+try{
+Login lg=new Login();
+Class.forName("com.mysql.jdbc.Driver");
+Connection con=DriverManager.getConnection("jdbc:mysql://loclhost:3306/test","root","");
+Statement stmt=con.createStatement();
+String sql1="Select balance from login where username=’"+lg.str+"’ and password=’"+lg.pass+"’";
+ResultSet rs1=stmt.executeQuery(sql1);
+int i;
+while(rs1.next())
+{
+i=rs1.getInt(1);
+srt=String.valueOf(i);
+}
+JOptionPane.showMessageDialog(null,"balance:"+srt);
+con.close();
+}
+catch(Exception e){System.out.println(e);}
+}
+});
+btnBalane.setBounds(49,33,145,23);
+contentPane.add(btnBalane);
+JButton btnWithdraw=new JButton("withdraw");
+btnWithdraw.addActionListener(new ActionListener(){
+public void actionPerformed(ActionEvent arg0){
+close();
+Withdraw b1=new Withdraw();
+b1.setVisible(true);
+}
+});
+btnWithdraw.setBounds(281,36,145,23);
+contentPane.add(btnWithdraw);
+JButton btnDeposit=new JButton("deposit");
+btnDeposit.addActionListener(new ActionListener(){
+public void actionPerformed(ActionEvent args0){
+close();
+Deposit b2=new Deposit();
+b2.setVisible(true);
+}
+});
+btnDeposit.setBounds(49,86,145,23);
+contentPane.add(btnDeposit);
+JButton btnChangepassword=new JButton("changepassword");
+btnChangepassword.addActionListener(new ActionListener(){
+public void actionPerformed(ActionEvent arg0){
+close();
+Changepassword b3=new Changepassword();
+b3.setVisible(true);
+}
+});
+btnChangepassword.setBounds(281,86,145,23);
+contentPane.add(btnChangepassword);
+JButton btnLogout=new JButton("logout");
+btnLogout.addActionListener(new ActionListener(){
+public void actionPerformed(ActionEvent arg0){
+try{
+JOptionPane.showMessageDialog(null,"logout successful");
+close();
+Login at=new Login();
+at.setVisible(true);}
+catch(Exception e){System.out.println(e);}
+}
+});
+btnLogout.setBounds(194,134,89,23);
+}
+}
+
+Changepassword.java
+package Bank;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+
+import java.sql.*;
+public class Changepassword extends JFrame{
+	private static final long serialVersionUID = 1L;
+private JPanel contentPane;
+private JPasswordField changepas;
+private JPasswordField oldpas;
+static String srt;
+public static void main(String[] args) {
+EventQueue.invokeLater(new Runnable() { 
+public void run() {
+try {
+Changepassword frame= new Changepassword();
+frame.setVisible(true);
+} catch (Exception e){
+e.printStackTrace();
+}
+}
+});
+}
+public void close() {
+WindowEvent wine= new WindowEvent(this,WindowEvent.WINDOW_CLOSING);
+Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wine);
+}
+public Changepassword() {
+setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+setBounds(100,100,450,300);
+contentPane=new JPanel();
+contentPane.setBorder(new EmptyBorder(5,5,5,5));
+setContentPane(contentPane);
+contentPane.setLayout(null);
+JLabel lblchangepassword=new JLabel("Change password");
+lblchangepassword.setHorizontalAlignment(SwingConstants.CENTER);
+lblchangepassword.setBounds(48,11,366,14);
+contentPane.add(lblchangepassword);
+JButton btnnewbutton= new JButton("change");
+btnnewbutton.addActionListener(new ActionListener() {
+public void actionPerformed1(ActionEvent arg0){
+try{ Login lg=new Login();
+Class.forName("com.mysql.jbdc.driver");
+Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306?test","root","");
+srt=oldpas.getText();
+if(srt.equalsIgnoreCase(lg.pass)){
+String sql="update login set password=? Where password=?";
+PreparedStatement stmt=con.prepareStatement(sql);
+stmt.setString(1,changepas.getText());
+stmt.setString(2,lg.pass);
+stmt.executeUpdate();
+
+JOptionPane.showMessageDialog(null,"successfully changed password");
+close();
+Login at=new Login();
+at.setVisible(true);
+}
+else
+{
+JOptionPane.showMessageDialog(null,"invalid password");
+}
+con.close();
+}
+catch(Exception e){System.out.println(e);}
+}
+public void actionPerformed(ActionEvent arg0) {
+	// TODO Auto-generated method stub
+	
+}
+});
+btnnewbutton.setBounds(183,189,89,23);
+contentPane.add(btnnewbutton);
+changepas=new JPasswordField();
+changepas.setBounds(48,107,327,20);
+contentPane.add(changepas);
+JLabel lbloldpassword=new JLabel("old password");
+lbloldpassword.setBounds(48,24,224,14);
+contentPane.add(lbloldpassword);
+oldpas=new JPasswordField();
+oldpas.setBounds(48,49,327,20);
+contentPane.add(oldpas);
+JLabel lblnewpassword=new JLabel("new password");
+lblnewpassword.setBounds(48,80,245,14);
+contentPane.add(lblnewpassword);
+}
+}
+Deposit.java
+package Bank;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.sql.*;
+public class Deposit extends JFrame{
+/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+private JPanel contentpane;
+private JTextField deposit;
+static String srt;
+/**
+*launch the application
+*/
+public static void main(String[] args) {
+EventQueue.invokeLater(new Runnable() { 
+public void run() {
+try {
+Deposit frame=new Deposit();
+frame.setVisible(true);
+}catch(Exception e) {
+e.printStackTrace();
+}
+}
+});
+}
+/**
+*create the frame
+*/
+public void close() {
+WindowEvent wine = new WindowEvent(this,WindowEvent.WINDOW_CLOSING);
+Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wine);
+}
+public Deposit(){
+setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+setBounds(100,100,450,300);
+contentpane=new JPanel();
+contentpane.setBorder(new EmptyBorder(5,5,5,5));
+setContentPane(contentpane);
+contentpane.setLayout(null);
+JLabel lbldeposit=new JLabel("deposit");
+lbldeposit.setBounds(188,11,49,14);
+contentpane.add(lbldeposit);
+deposit=new JTextField();
+deposit.setBounds(188,11,49,14);
+contentpane.add(deposit);
+deposit.setColumns(10);
+JButton btnpressok= new JButton("press ok");
+btnpressok.addActionListener(new ActionListener() {
+public void actionPerformed(ActionEvent arg0){
+try{Login lg=new Login();
+Class.forName("com.mysql.jbdc.driver");
+Connection con=DriverManager.getConnection("jbdc:mysql://localhost:3306/test","root","");
+Statement stmt1=con.createStatement();
+String sql1="select balance from login where username='"+lg.str+"'and password'"+lg.pass+"";
+srt=deposit.getText();
+int j=Integer.parseInt(srt.trim()),k=0;
+ResultSet rs1=stmt1.executeQuery(sql1);
+int i;
+while(rs1.next())
+{
+i=rs1.getInt(1);
+k=i;
+}
+k=k+j;
+String sql="update login set balance = ? where password =?";
+PreparedStatement stmt=con.prepareStatement(sql);
+stmt.setInt(1,k);
+stmt.setString(2,lg.pass);
+stmt.executeUpdate();
+JOptionPane.showMessageDialog(null,"balance:"+k);
+close();
+Account at=new Account();
+at.setVisible(true);
+con.close();
+}
+catch(Exception e){System.out.println(e);}
+}
+
+public void actionPerformed1(ActionEvent arg0) {
+	// TODO Auto-generated method stub
+	
+}
+});
+btnpressok.setBounds(158,96,89,23);
+contentpane.add(btnpressok);
+}
+}
+Login.java
+package Bank;
+import java.awt.EventQueue;
+import java.awt.event.*;
+import java.awt.*;
+import java.sql.*;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+public class Login extends JFrame{
+/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+private JPanel contentPane;
+private JTextField user;
+private JPasswordField pas;
+String srt;
+String pass;
+String str;
+public static void main(String[] args){
+EventQueue.invokeLater(new Runnable(){
+public void run(){
+try{
+Login frame = new Login();
+frame.setVisible(true);
+}catch (Exception e) {
+e.printStackTrace();
+}
+}
+});
+}
+public void close() {
+WindowEvent winE=new WindowEvent(this,WindowEvent.WINDOW_CLOSING);
+Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(winE);
+}
+public Login(){
+setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+setBounds(100,100,511,365);
+contentPane=new JPanel();
+contentPane.setBorder(new EmptyBorder(5,5,5,5));
+setContentPane(contentPane);
+contentPane.setLayout(null);
+JLabel lblNewlabel=new JLabel("login page");
+lblNewlabel.setHorizontalAlignment(SwingConstants.CENTER);
+lblNewlabel.setBounds(45,34,344,14);
+contentPane.add(lblNewlabel);
+JLabel lblUsername=new JLabel("username");
+lblUsername.setBounds(44,59,133,14);
+contentPane.add(lblUsername);
+user=new JTextField();
+user.setBounds(45,78,344,20);
+contentPane.add(user);
+user.setColumns(10);
+JLabel llPassword=new JLabel("password");
+llPassword.setBounds(45,109,89,14);
+contentPane.add(llPassword);
+JButton btnLogin=new JButton("login");
+btnLogin.addActionListener(new ActionListener(){
+public void actionPerformed(ActionEvent args0){
+try{
+Class.forName("com.mysql.jdbc.Driver");
+Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/test","root","");
+Statement stmt=con.createStatement();
+String sql="Select*from login where username='"+user.getText()+"’and password='"+pas.getText()+"’";
+String sql1="select accountnumber from login where username="+user.getText()+"’ and password="+pas.getText()+"’";
+pass=pas.getText();
+str=user.getText();
+ResultSet rs1=stmt.executeQuery(sql1);
+int i;
+while(rs1.next())
+{
+i=rs1.getInt(1);
+srt=String.valueOf(i);
+}
+ResultSet rs=stmt.executeQuery(sql);
+if(rs.next())
+{JOptionPane.showMessageDialog(null,"login successful");
+close();
+Account at=new Account();
+at.setVisible(true);
+}
+else
+{JOptionPane.showMessageDialog(null,"incorrect nameor password");
+}
+con.close();
+}catch(Exception e) {System.out.println(e);}
+}
+});
+btnLogin.setBounds(45,178,89,23);
+contentPane.add(btnLogin);
+pas=new JPasswordField();
+pas.setBounds(45,134,344,20);
+contentPane.add(pas);
+}
+}
+Withdraw.java
+package Bank;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.sql.*;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+public class Withdraw extends JFrame{
+/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+private JPanel contentpane;
+private JTextField withdraw;
+static String srt1,srt;
+/**
+*launch the application
+*/
+public static void main(String[] args) {
+EventQueue.invokeLater(new Runnable() { 
+public void run() {
+try {
+Withdraw frame=new Withdraw ();
+frame.setVisible(true);
+}catch(Exception e) {
+e.printStackTrace();
+}
+}
+});
+}
+/**
+*create the frame
+*/
+public void close(){
+WindowEvent wine = new WindowEvent(this,WindowEvent.WINDOW_CLOSING);
+Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(wine);
+
+
+}
+public Withdraw(){
+setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+setBounds(100,100,450,300);
+contentpane=new JPanel();
+contentpane.setBorder(new EmptyBorder(5,5,5,5));
+setContentPane(contentpane);
+contentpane.setLayout(null);
+JLabel lblwithdraw =new JLabel("withdraw");
+lblwithdraw.setBounds(200,11,105,14);
+contentpane.add(lblwithdraw);
+withdraw =new JTextField();
+withdraw.setBounds(71,59,313,20);
+contentpane.add(withdraw);
+withdraw.setColumns(10);
+JButton btnpressok= new JButton("press ok");
+btnpressok.addActionListener(new ActionListener() {
+public void actionperformed(ActionEvent arg0){
+try{Login lg=new Login();
+Class.forName("com.mysql.jbdc.driver");
+Connection con=DriverManager.getConnection("jbdc:mysql://localhost:3306/test","root","");
+Statement stmt1=con.createStatement();
+String sql1="select balance from login where username='"+lg.str+"'and password='"+lg.pass+"'";
+srt=withdraw.getText();
+int j=Integer.parseInt(srt.trim()),k=0;
+ResultSet rs1=stmt1.executeQuery(sql1);
+int i;
+while(rs1.next())
+{
+i=rs1.getInt(1);
+k=i;
+}
+k=k-j;
+String sql="update login set balance = ? where password =?";
+PreparedStatement stmt=con.prepareStatement(sql);
+stmt.setInt(1,k);
+stmt.setString(2,lg.pass);
+stmt.executeUpdate();
+
+JOptionPane.showMessageDialog(null,"balance:"+k);
+close();
+Account at=new Account();
+at.setVisible(true);
+con.close();
+}
+catch(Exception e){System.out.println(e);
+}}
+public void actionPerformed(ActionEvent arg0) {
+	// TODO Auto-generated method stub
+	
+}
+});
+btnpressok.setBounds(174,98,89,23);
+contentpane.add(btnpressok);
+}
+}
